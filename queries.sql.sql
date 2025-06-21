@@ -1,0 +1,169 @@
+/* 
+Overview: 
+As a data analyst at our dynamic e-commerce company, you're tasked 
+with leveraging our extensive databases to extract insights that drive our business strategies forward. 
+
+Your analysis will inform various departments, from marketing to supply chain, 
+providing them with actionable data to optimize our operations, enhance customer satisfaction, and boost our sales performance. 
+
+This case study simulates real-world tasks you will encounter and requires you to apply your SQL skills to solve practical business problems.
+
+BUSINESS  CONTEXT :
+Your work will directly impact the following business verticals:
+
+Customer Insights: 		Understanding our customer base to tailor marketing strategies.
+Product Analysis: 		Evaluating product performance to inform stock and sales strategies.
+Sales Optimization: 	Analyzing sales data to identify trends, opportunities, and areas for improvement.
+Inventory Management: 	Managing stock levels to ensure product availability while minimizing excess inventory.
+
+
+Dataset Details:         All these datasets are already fed in our system and you can extract the same using the SQL Queries.
+
+Customers Dataset:       customer_id, name, and location
+Products Dataset:        product_id, name, category, and price.
+Orders Dataset:          order_id, order_date, customer_id, and total_amount.
+OrderDetails Dataset:    order_id, product_id, quantity, and price_per_unit.  
+*/
+
+
+
+-- The Dataset
+CREATE DATABASE IF NOT EXISTS  Ecommerce_company;
+USE Ecommerce_company;
+
+
+-- Checking all tables, inside our Db
+SELECT * FROM customers;
+SELECT * FROM orders;
+SELECT * FROM products;
+SELECT * FROM orderrdetails;
+
+
+/*  HERE IS MY ANALYSIS  */
+
+--             1. Customer Insights
+-- a) Count customers by location:      
+SELECT location, COUNT(*) AS customer_count
+FROM Customers
+GROUP BY location
+ORDER BY customer_count DESC;
+
+-- b) Top spenders:
+SELECT c.Customer_Id, c.name, COUNT(o.order_id) AS total_orders, SUM(o.total_amount) AS total_spent
+FROM Customers c
+JOIN Orders o USING(Customer_Id)
+GROUP BY c.Customer_Id, c.name
+ORDER BY total_spent DESC
+LIMIT 10;
+
+
+
+
+--                                      2. Product Analysis
+--  a) Sales by product:
+SELECT
+  p.product_id,
+  p.name AS product_name,
+  p.category,
+  SUM(od.quantity) AS units_sold,
+  SUM(od.quantity * od.price_per_unit) AS revenue
+FROM Products p
+JOIN Orderrdetails od USING(product_id)
+GROUP BY p.product_id, p.name, p.category
+ORDER BY revenue DESC
+LIMIT 10;
+
+
+--  b) Category performance 
+SELECT
+  p.category,
+  SUM(od.quantity) AS units_sold,
+  SUM(od.quantity * od.price_per_unit) AS revenue
+FROM Products p
+JOIN Orderrdetails od USING(product_id)
+GROUP BY p.category
+ORDER BY revenue DESC;
+
+
+
+
+/* 3. Sales Optimization */
+-- a) Monthly sales trend:
+SELECT
+  DATE_FORMAT(o.order_date, '%Y-%m') AS month,
+  COUNT(o.order_id) AS num_orders,
+  SUM(o.total_amount) AS total_revenue,
+  round(AVG(o.total_amount),2) AS avg_order_value
+FROM Orders o
+GROUP BY month
+ORDER BY month;
+
+-- b) Products that sell together (market basket):
+SELECT
+  od1.product_id AS product_a,
+  od2.product_id AS product_b,
+  COUNT(DISTINCT od1.order_id) AS orders_together
+FROM Orderrdetails od1
+JOIN Orderrdetails od2
+  ON od1.order_id = od2.order_id
+  AND od1.product_id < od2.product_id
+GROUP BY product_a, product_b
+HAVING orders_together >= 5
+ORDER BY orders_together DESC
+LIMIT 10;
+
+
+
+
+/*  4. Inventory Management */
+-- a) Average inventory turnover days assuming each product started with 1,000 units: 
+
+SELECT
+  p.product_id,
+  p.name,
+  SUM(od.quantity) AS units_sold,
+  ROUND(1000 / (SUM(od.quantity) / COUNT(DISTINCT DATE(o.order_date))), 1) AS avg_days_to_turnover
+FROM Products p
+JOIN Orderrdetails od USING(product_id)
+JOIN Orders o USING(order_id)
+GROUP BY p.product_id, p.name
+HAVING units_sold > 0
+ORDER BY avg_days_to_turnover ASC
+LIMIT 20;
+
+
+-- b) Stock re-order suggestion:
+SELECT
+  p.product_id,
+  p.name,
+  p.category,
+  COALESCE(SUM(od.quantity), 0) AS units_sold_last_30d,
+  CASE
+    WHEN COALESCE(SUM(od.quantity), 0) > 0
+    THEN CEIL(COALESCE(SUM(od.quantity), 0) * 2 / 30)
+    ELSE NULL
+  END AS suggested_daily_reorder
+FROM Products p
+LEFT JOIN Orderrdetails od
+  ON p.product_id = od.product_id
+LEFT JOIN Orders o
+  ON od.order_id = o.order_id
+  AND o.order_date >= CURDATE() - INTERVAL 30 DAY
+GROUP BY p.product_id, p.name, p.category
+ORDER BY suggested_daily_reorder DESC;
+
+
+
+
+/*  5. Bringing It All Together */
+
+CREATE OR REPLACE VIEW monthly_dashboard AS
+SELECT DATE_FORMAT(o.order_date, '%Y-%m') AS month, COUNT(DISTINCT o.customer_id) AS active_customers,
+  COUNT(o.order_id) AS total_orders, SUM(o.total_amount) AS total_revenue,
+  AVG(o.total_amount) AS avg_order_value, SUM(od.quantity * od.price_per_unit) AS total_units_sold
+FROM Orders o
+JOIN Orderrdetails od USING(order_id)
+GROUP BY month 
+ORDER BY month;
+
+SELECT * FROM monthly_dashboard;
