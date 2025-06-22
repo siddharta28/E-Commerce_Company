@@ -1,4 +1,4 @@
-# 📦 E-Commerce Company – MySQL Case Study
+# 📦 E-Commerce Company – MySQL_Case-study [(Watch Here)](https://drive.google.com/file/d/1isLT5RNk4M5iK8FWbntB7nTyT0ybLKiG/view?usp=drive_link)
 
 Analyzed 4 structured tables and 4 CSV files (1,500+ records) for an e-commerce company using MySQL to extract customer, product, sales, and inventory insights with real-world business queries and KPIs.
 
