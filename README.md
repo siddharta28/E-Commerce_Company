@@ -63,8 +63,8 @@ FROM OrderDetails od
 JOIN Products p ON od.product_id = p.product_id
 GROUP BY p.name
 ORDER BY total_revenue DESC
-LIMIT 5;
-
+LIMIT 5; 
+```
 
 ## 📂 Project Structure
 
