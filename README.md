@@ -64,3 +64,25 @@ JOIN Products p ON od.product_id = p.product_id
 GROUP BY p.name
 ORDER BY total_revenue DESC
 LIMIT 5;
+
+
+## 📂 Project Structure
+
+E-Commerce_Company/
+├── 📄 SIDD'S MYSQL Analysis.sql – Main SQL script including schema creation and analysis queries
+├── 📁 E-comm-Dataset-MySQL/ – Folder containing raw CSV files (Customers, Products, Orders, OrderDetails)
+│ ├── customers-e-comm.csv – Customer-level data
+│ ├── products-e-comm.csv – Product-level details
+│ ├── orders-e-comm.csv – Order-level transactional data
+│ └── ORDERDetails-E-comm.csv – Line-item data for each order
+├── 📄 README.md – Documentation explaining business context, SQL logic, and insights
+
+
+
+## 📈 Outcomes & Learning
+
+- ✅ Built a complete e-commerce analysis pipeline in MySQL covering schema design, relational integrity, and business querying.
+- ✅ Analyzed 1,500+ rows and 800+ columns across 4 tables, producing insights into customer behavior, order patterns, and product sales.
+- ✅ Practiced key SQL concepts including JOINS, GROUP BY, aggregate functions, date filtering, CASE statements, and subqueries.
+- ✅ Learned to import and structure real-world datasets using MySQL Workbench's Table Data Import Wizard.
+- ✅ Enhanced business understanding by simulating real use cases like segmentation, inventory tracking, and sales optimization.
