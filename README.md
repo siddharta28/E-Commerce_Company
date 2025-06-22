@@ -1,53 +1,55 @@
 # 📦 E-Commerce Company – MySQL Case Study
 
-A SQL-based data analysis case study simulating an e-commerce company database to derive business insights.
+An end-to-end SQL case study project simulating a real-world e-commerce business. The project involves creating a database schema, importing structured data, and analyzing key business metrics to support data-driven decisions.
 
 ---
 
-## 📁 Project Structure
+## 📁 Dataset Overview
 
-- `schema.sql` → SQL script to create all tables and relationships
-- `queries.sql` → Insightful queries for customer, product, sales, and inventory analysis
-- `E-comm-Dataset-MySQL/` → Contains raw `.csv` files used to populate the database
+This project uses 4 interrelated datasets:
 
----
+| Table Name       | Description                                         |
+|------------------|-----------------------------------------------------|
+| Customers        | customer_id, name, location                         |
+| Products         | product_id, name, category, price                   |
+| Orders           | order_id, order_date, customer_id, total_amount     |
+| OrderDetails     | order_id, product_id, quantity, price_per_unit      |
 
-## 🧾 Dataset Overview
-
-| Table Name       | Description                                |
-|------------------|--------------------------------------------|
-| Customers        | Customer ID, Name, and Location            |
-| Products         | Product ID, Name, Category, Price          |
-| Orders           | Order ID, Order Date, Customer ID, Amount |
-| OrderDetails     | Line items (Order ID, Product ID, Qty, Unit Price) |
-
-All `.csv` files were imported using the MySQL Workbench **Table Data Import Wizard**.
+These `.csv` files were imported using MySQL Workbench’s **Table Data Import Wizard**.
 
 ---
 
-## 🔍 Key SQL Insights Covered
+## 🧠 Business Goals
 
-- Top-spending customers and customer distribution by location
-- Best-performing products and revenue per category
-- Monthly sales trends and average order value
-- Order-level and product-level profitability
-- Created view: `monthly_dashboard` for consolidated KPIs
-
----
-
-## 🛠 Tools & Skills Used
-
-- MySQL Workbench (v8+)
-- SQL (Joins, Aggregations, Views, Subqueries)
-- CSV Import & Data Cleaning
-- Database schema design and relationships
+- 📌 **Customer Analysis** – Identify top customers and location-based trends
+- 📌 **Product Performance** – Evaluate high/low selling items and category-wise revenue
+- 📌 **Sales Trends** – Track monthly order and revenue growth
+- 📌 **Inventory Insights** – Spot underperformers and reorder signals
 
 ---
 
-## 📈 Sample SQL Query Snippet
+## 🛠️ Tools Used
+
+- MySQL Workbench
+- SQL (Joins, Aggregates, Views, Subqueries, Grouping)
+- Table Data Import Wizard
+- CSV files (manually cleaned)
+
+---
+
+## 🔍 Sample Queries
 
 ```sql
-SELECT location, COUNT(customer_id) AS customer_count
+-- Customers by Location
+SELECT location, COUNT(*) AS total_customers
 FROM Customers
 GROUP BY location
-ORDER BY customer_count DESC;
+ORDER BY total_customers DESC;
+
+-- Top 5 Products by Revenue
+SELECT p.name, SUM(od.quantity * od.price_per_unit) AS total_revenue
+FROM OrderDetails od
+JOIN Products p ON od.product_id = p.product_id
+GROUP BY p.name
+ORDER BY total_revenue DESC
+LIMIT 5;
