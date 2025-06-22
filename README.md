@@ -1,6 +1,6 @@
 # 📦 E-Commerce Company – MySQL Case Study
 
-An end-to-end SQL case study project simulating a real-world e-commerce business. The project involves creating a database schema, importing structured data, and analyzing key business metrics to support data-driven decisions.
+Analyzed 4 structured tables and 4 CSV files (1,500+ records) for an e-commerce company using MySQL to extract customer, product, sales, and inventory insights with real-world business queries and KPIs.
 
 ---
 
