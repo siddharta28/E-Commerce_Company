@@ -72,10 +72,10 @@ LIMIT 5;
 E-Commerce_Company/
 - 📄 schema.sql – Main SQL script including schema creation and analysis' queries
 - 📁 E-comm-Dataset-MySQL/ – Folder containing raw CSV files (Customers, Products, Orders, OrderDetails)
--  customers-e-comm.csv – Customer-level data
--  products-e-comm.csv – Product-level details
--  orders-e-comm.csv – Order-level transactional data
--  ORDERDetails-E-comm.csv – Line-item data for each order
+--  customers-e-comm.csv – Customer-level data
+--  products-e-comm.csv – Product-level details
+--  orders-e-comm.csv – Order-level transactional data
+--  ORDERDetails-E-comm.csv – Line-item data for each order
 
 
 ## 📈 Outcomes & Learning
