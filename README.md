@@ -4,6 +4,17 @@ An end-to-end SQL case study project simulating a real-world e-commerce business
 
 ---
 
+## 📑 Table of Contents
+
+- [📁 Dataset Overview](#-dataset-overview)
+- [🧠 Business Goals](#-business-goals)
+- [🛠️ Tools Used](#️-tools-used)
+- [🔍 Sample Queries](#-sample-queries)
+- [📂 Project Structure](#-project-structure)
+- [📈 Outcomes & Learning](#-outcomes--learning)
+
+---
+
 ## 📁 Dataset Overview
 
 This project uses 4 interrelated datasets:
